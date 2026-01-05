@@ -1,0 +1,31 @@
+name: Refresh Mercado Livre Token
+
+on:
+  schedule:
+    - cron: '0 */5 * * *'
+  workflow_dispatch:
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - run: pip install requests
+
+      - run: python refresh_token.py
+        env:
+          ML_CLIENT_ID: ${{ secrets.ML_CLIENT_ID }}
+          ML_CLIENT_SECRET: ${{ secrets.ML_CLIENT_SECRET }}
+          ML_REFRESH_TOKEN: ${{ secrets.ML_REFRESH_TOKEN }}
+
+      - run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add token.json
+          git commit -m "Update token"
+          git push
