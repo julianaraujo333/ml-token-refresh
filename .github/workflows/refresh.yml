@@ -5,6 +5,9 @@ on:
     - cron: '0 */5 * * *'
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   refresh:
     runs-on: ubuntu-latest
@@ -22,12 +25,10 @@ jobs:
           ML_CLIENT_ID: ${{ secrets.ML_CLIENT_ID }}
           ML_CLIENT_SECRET: ${{ secrets.ML_CLIENT_SECRET }}
           ML_REFRESH_TOKEN: ${{ secrets.ML_REFRESH_TOKEN }}
+
       - run: |
           git config user.name "github-actions"
           git config user.email "actions@github.com"
           git add token.json
           git commit -m "Update token" || echo "No changes to commit"
           git push || echo "Nothing to push"
-
-
-          
