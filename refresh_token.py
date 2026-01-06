@@ -1,6 +1,8 @@
 import requests
 import json
+import os
 from datetime import datetime
+
 
 url = "https://api.mercadolibre.com/oauth/token"
 
